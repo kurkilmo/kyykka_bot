@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 # Ladataan .env-tiedosto
-load_dotenv('/Users/nikoiljin/tgBot/kyykkäprojekti/.env')
+load_dotenv('.env')
 
 # Telegram Botin Token ja Chat ID
 TG_TOKEN = os.getenv("TG_TOKEN")
