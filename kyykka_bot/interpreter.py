@@ -1,4 +1,4 @@
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from telegram.ext import Application, CommandHandler
 import datetime
 from commands.start import start
 from commands.roast import roast
@@ -8,7 +8,7 @@ from commands.registration import add_user, cancel_kyykka, list_users
 from utils.users import reset_users
 
 
-def interpreter(application):
+def interpreter(application: Application):
     """ Rekisteröi komennot ja ajastetut tehtävät """
     
     # Komentojen rekisteröinti
