@@ -1,5 +1,6 @@
 from config import CHAT_ID
 from utils.events import get_next_event
+from telegram.ext import ContextTypes
 
 registered_users = []
 
@@ -20,7 +21,7 @@ def unregister_user(username):
 def list_registered_users():
     return registered_users
 
-async def reset_users(context):
+async def reset_users(context: ContextTypes.DEFAULT_TYPE):
     global registered_users
     registered_users = []
     await context.bot.send_message(
