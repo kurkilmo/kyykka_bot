@@ -1,5 +1,4 @@
 # kyykka_bot
-Fork of [Iljinisa/kyykka_bot](https://github.com/Iljinisa/kyykka_bot/tree/main)
 
 ## Developement environment
 `.env`:
