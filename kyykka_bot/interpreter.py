@@ -23,13 +23,6 @@ def interpreter(application: Application):
     application.add_handler(CommandHandler("eipas", remove_event))
     application.add_handler(CommandHandler("seuraava", list_events))
     
-    # Ajastetut tehtävät
-    job_queue = application.job_queue
-    job_queue.run_daily(
-        reset_users, 
-        time=datetime.time(hour=11, minute=0, second=0), 
-        days=(0,)
-    )
     
     application.run_polling()
 

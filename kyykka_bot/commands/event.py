@@ -33,7 +33,7 @@ async def add_event(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         # Hae tapahtuman aika ja ajoita resetti
         event_datetime = get_event_datetime()
         if event_datetime:
-            job = context.job_queue.schedule_once(
+            job = context.job_queue.run_once(
                 reset_users,
                 when=event_datetime,
                 name=f"event_reset_{päivä}_{aika}"
