@@ -1,7 +1,7 @@
 import re
 from telegram import Update, ChatMember
 from telegram.ext import ContextTypes
-from utils.events import add_new_event, remove_current_event, get_next_event
+from utils.events import add_new_event, remove_current_event, get_next_event, get_event_datetime, set_job_id, get_job_id
 from utils.users import reset_users
 
 
@@ -29,6 +29,17 @@ async def add_event(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         aika = event_time.group(0)
         päivä = event_day.group(0)
         add_new_event(aika, päivä)
+        
+        # Hae tapahtuman aika ja ajoita resetti
+        event_datetime = get_event_datetime()
+        if event_datetime:
+            job = context.job_queue.schedule_once(
+                reset_users,
+                when=event_datetime,
+                name=f"event_reset_{päivä}_{aika}"
+            )
+            set_job_id(job.id)
+        
         await update.message.reply_text(f"Kyykkä-tapahtuma lisätty: {päivä} klo {aika}")
     else:
         await update.message.reply_text("Anna päivämäärä ja aika muodossa: dd.mm.yyyy hh:mm")
@@ -38,6 +49,14 @@ async def remove_event(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         await update.message.reply_text("Tämä komento on vain ylläpitäjille. 🚫")
         return
     """ Poistaa nykyisen tapahtuman """
+    # Peruuta aiemmin ajoitettu resetti-job
+    job_id = get_job_id()
+    if job_id:
+        context.job_queue.get_jobs_by_name(job_id)
+        for job in context.job_queue.jobs():
+            if job.id == job_id:
+                job.schedule_removal()
+    
     remove_current_event()
     await reset_users(context)
     await update.message.reply_text("Kyykkä-tapahtuma poistettu.")
